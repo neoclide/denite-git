@@ -2,7 +2,13 @@
 
 Git log and git status source for [Denite.nvim](https://github.com/Shougo/denite.nvim).
 
+Video of denite gitlog:
+
 [![asciicast](https://asciinema.org/a/104395.png)](https://asciinema.org/a/104395)
+
+Video of denite gitstatus:
+
+[![asciicast](https://asciinema.org/a/104410.png)](https://asciinema.org/a/104410)
 
 ## Installation
 
