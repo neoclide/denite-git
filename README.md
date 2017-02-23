@@ -18,7 +18,7 @@ For user of [dein.vim](https://github.com/Shougo/dein.vim), add:
     call dein#add('chemzqm/vim-easygit')
     call dein#add('chemzqm/denite-git')
 
-to your vimrc and run `PlugUpdate` if needed.
+to your vimrc and run `PlugInstall` if needed.
 
 ## Usage
 
@@ -57,6 +57,34 @@ Actions of git status:
 * `delete` run git diff for seleted file. (just named delete)
 * `reset` run git reset/checkout or remove for seleted file(s).
 * `commit` run git commit for seleted file(s).
+
+## Key Mapppings
+
+It's recommanded to add custom key mappings for improve your speed of
+interacting with denite source, for example:
+
+``` viml
+call denite#custom#map(
+      \ 'normal',
+      \ 'a',
+      \ '<denite:do_action:add>',
+      \ 'noremap'
+      \)
+
+call denite#custom#map(
+      \ 'normal',
+      \ 'd',
+      \ '<denite:do_action:delete>',
+      \ 'noremap'
+      \)
+
+call denite#custom#map(
+      \ 'normal',
+      \ 'r',
+      \ '<denite:do_action:reset>',
+      \ 'noremap'
+      \)
+```
 
 ## LICENSE
 

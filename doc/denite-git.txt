@@ -1,0 +1,122 @@
+*denite-git.txt*	Git log and git status sources for |denite|
+
+Version: 0.1
+Author:  Qiming Zhao <chemzqm at gmail.com>
+License: MIT license
+
+CONTENTS						*denite-git-contents*
+
+Introduction		|denite-git-introduction|
+Install			|denite-git-install|
+Usage			|denite-git-usage|
+Actions 		|denite-git-actions|
+  gitlog 			|denite-gitlog-actions|
+  gitstatus 			|denite-gitstatus-actions|
+Changelog 			|denite-git-changelog|
+Feedback 			|denite-feedback|
+
+==============================================================================
+INTRODUCTION						*denite-git-introduction*
+
+Denite-git is a vim/neovim plugin for user to do easily manage git log and git
+status with the help of |denite| interface.
+
+==============================================================================
+INSTALL 					 	*denite-git-install*
+
+Make sure you have "echo has('python3')" return 1 before useing |denite|.
+
+denite.nvim is required for provide union interface and vim-easygit is
+required to perform git command in vim.
+
+Take [vim-plug](https://github.com/junegunn/vim-plug) for example, add: >
+
+    Plug 'Shougo/denite.nvim'
+    Plug 'chemzqm/vim-easygit'
+    Plug 'chemzqm/denite-git'
+
+To your .vimrc and run "PlugInstall" after vim restarted.
+
+Run "UpdateRemotePlugins" command after denite.nvim installed.
+
+Note: |easygit| have some issue of windows support.
+
+==============================================================================
+USAGE 					 		*denite-git-usage*
+
+For gitlog source: >
+
+  "log of current file
+  Denite gitlog
+
+  " all git log of current repository
+  Denite gitlog:all
+
+  " filter gitlog with fix as input
+  Denite gitlog::fix
+
+For gitstatus source: >
+
+  Denite gitstatus
+
+==============================================================================
+ACTIONS 					 	*denite-git-actions*
+
+------------------------------------------------------------------------------
+GITLOG ACTIONS 					*denite-gitlog-actions*
+
+open (default)
+		Open seleted commit (with current file diff only if not all).
+
+preview
+		Preview seleted commit in preview window.
+
+delete
+		Run git diff with current commit(s) for current buffer.
+		
+		Note: three way diff is possible.
+
+reset
+		Run git reset command with current commit.
+
+The Kind of |denite-gitlog| is inherited from openable, so all openable
+actions are available.
+
+------------------------------------------------------------------------------
+GITSTATUS ACTIONS 				*denite-gitstatus-actions*
+
+open (default)
+		Open seleted file, default action
+add
+		Run git add for seleted file(s).
+delete
+		Run git diff for seleted file. (just named delete)
+
+reset
+		Run git reset/checkout or remove for seleted file(s).
+		A prompt would shown when needed.
+
+Commit
+
+		run git commit for seleted file(s).
+
+The Kind of |denite-gitstatus| is inherited from file, so all file
+actions are available.
+
+
+==============================================================================
+CHANGELOG 					 	*denite-git-changelog*
+
+0.1.0   Feb 24, 2017
+
+	- works
+
+
+==============================================================================
+FEEDBACK 					 	*denite-git-feedback*
+
+|denite-git| is fully open sourced at https://github.com/chemzqm/denite-git.
+feel free to open a issue when you get any problem.
+
+==============================================================================
+vim:tw=78:ts=8:ft=help:norl:noet:fen:
