@@ -2,6 +2,8 @@
 
 Git log and git status source for [Denite.nvim](https://github.com/Shougo/denite.nvim).
 
+[![asciicast](https://asciinema.org/a/104395.png)](https://asciinema.org/a/104395)
+
 ## Installation
 
 For user of [vim-plug](https://github.com/junegunn/vim-plug), add:
@@ -46,7 +48,7 @@ Actions of gitlog:
 * `open` default action for open seleted commit.
 * `preview` preview seleted commit.
 * `delete` run git diff with current commit for current buffer. (just named delete)
-* `reset` runt git reset with current commit.
+* `reset` run git reset with current commit.
 
 Actions of git status:
 
