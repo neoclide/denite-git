@@ -18,7 +18,7 @@ Feedback 			|denite-feedback|
 ==============================================================================
 INTRODUCTION						*denite-git-introduction*
 
-Denite-git is a vim/neovim plugin for user to do easily manage git log and git
+Denite-git is a vim/neovim plugin for user to easily manage git log and git
 status with the help of |denite| interface.
 
 ==============================================================================
@@ -41,12 +41,14 @@ Run "UpdateRemotePlugins" command after denite.nvim installed.
 
 Note: |easygit| have some issue of windows support.
 
+Note: |denite-git| requires python >= 3.5.
+
 ==============================================================================
 USAGE 					 		*denite-git-usage*
 
 For gitlog source: >
 
-  "log of current file
+  " git log of current file
   Denite gitlog
 
   " all git log of current repository
@@ -58,6 +60,9 @@ For gitlog source: >
 For gitstatus source: >
 
   Denite gitstatus
+
+Note: denite-git find git root in the directory of vim current working
+directory ":echo getcwd()"
 
 ==============================================================================
 ACTIONS 					 	*denite-git-actions*
@@ -87,8 +92,10 @@ GITSTATUS ACTIONS 				*denite-gitstatus-actions*
 
 open (default)
 		Open seleted file, default action
+
 add
 		Run git add for seleted file(s).
+
 delete
 		Run git diff for seleted file. (just named delete)
 
@@ -110,7 +117,6 @@ CHANGELOG 					 	*denite-git-changelog*
 0.1.0   Feb 24, 2017
 
 	- works
-
 
 ==============================================================================
 FEEDBACK 					 	*denite-git-feedback*
