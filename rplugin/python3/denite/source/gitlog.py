@@ -64,11 +64,12 @@ class Source(Base):
         context['__root'] = _find_root(cwd)
         context['__winid'] = self.vim.call('win_getid')
 
+        buftype = self.vim.current.buffer.options['buftype']
         fullpath = self.vim.call('expand', '%:p')
-        if is_all or len(fullpath) == 0:
-            context['__file'] = ''
-        else:
+        if fullpath and not buftype and not is_all:
             context['__file'] = os.path.relpath(fullpath, context['__root'])
+        else:
+            context['__file'] = ''
 
 
     def on_close(self, context):

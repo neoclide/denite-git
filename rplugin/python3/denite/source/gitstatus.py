@@ -69,14 +69,6 @@ class Source(Base):
         cwd = self.vim.call('getcwd')
 
         context['__root'] = _find_root(cwd)
-        context['__winid'] = self.vim.call('win_getid')
-
-        fullpath = self.vim.call('expand', '%:p')
-        if len(fullpath) == 0:
-            context['__file'] = ''
-        else:
-            context['__file'] = os.path.relpath(fullpath, context['__root'])
-
 
     def highlight(self):
         self.vim.command('highlight deniteGitStatusAdd guifg=#009900 ctermfg=2')
