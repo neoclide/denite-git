@@ -1,6 +1,6 @@
 *denite-git.txt*	Git log and git status sources for |denite|
 
-Version: 0.1
+Version: 0.2
 Author:  Qiming Zhao <chemzqm at gmail.com>
 License: MIT license
 
@@ -12,14 +12,15 @@ Usage			|denite-git-usage|
 Actions 		|denite-git-actions|
   gitlog 			|denite-gitlog-actions|
   gitstatus 			|denite-gitstatus-actions|
+  gitchanged 			|denite-gitchanged-actions|
 Changelog 			|denite-git-changelog|
 Feedback 			|denite-feedback|
 
 ==============================================================================
 INTRODUCTION						*denite-git-introduction*
 
-Denite-git is a vim/neovim plugin for user to easily manage git log and git
-status with the help of |denite| interface.
+Denite-git is a vim/neovim plugin for user to easily manage git log, git
+status and git changed lines with the help of |denite| interface.
 
 ==============================================================================
 INSTALL 					 	*denite-git-install*
@@ -60,6 +61,10 @@ For gitlog source: >
 For gitstatus source: >
 
   Denite gitstatus
+
+For gitchanged source: >
+
+  Denite gitchanged
 
 Note: denite-git find git root in the directory of vim current working
 directory ":echo getcwd()"
@@ -110,18 +115,27 @@ Commit
 The Kind of |denite-gitstatus| is inherited from file, so all file
 actions are available.
 
+------------------------------------------------------------------------------
+GITCHANGED ACTIONS 				*denite-gitchanged-actions*
+
+open (default)
+		open seleted line in current buffer.
 
 ==============================================================================
 CHANGELOG 					 	*denite-git-changelog*
 
-0.1.0   Feb 24, 2017
+0.1     Feb 24, 2017
 
 	- works
+
+0.2 	Feb 25, 2017
+
+	- add gitchanged source
 
 ==============================================================================
 FEEDBACK 					 	*denite-git-feedback*
 
-|denite-git| is fully open sourced at https://github.com/chemzqm/denite-git.
+|denite-git| is open sourced at https://github.com/chemzqm/denite-git.
 feel free to open a issue when you get any problem.
 
 ==============================================================================

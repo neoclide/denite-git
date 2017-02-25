@@ -1,6 +1,10 @@
 # Denite-git
 
-Git log and git status source for [Denite.nvim](https://github.com/Shougo/denite.nvim).
+[![](http://img.shields.io/github/issues/chemzqm/denite-git.svg)](https://github.com/chemzqm/denite-git/issues)
+[![](http://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+[![](https://img.shields.io/badge/doc-%3Ah%20vim--run.txt-red.svg)](doc/denite-git.txt)
+
+Git log, git status and git changed source for [Denite.nvim](https://github.com/Shougo/denite.nvim).
 
 Video of denite gitlog:
 
@@ -46,6 +50,14 @@ For git status:
 ``` vim
 Denite gitstatus
 ```
+
+For git changed
+
+``` vim
+Denite gitchanged
+```
+
+`gitchanged` source is just simple line source.
 
 ## Actions
 
