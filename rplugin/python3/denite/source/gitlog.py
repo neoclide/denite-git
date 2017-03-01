@@ -27,7 +27,6 @@ def _parse_line(line, gitdir, filepath, winid):
         'source__winid': winid
     }
 
-
 def _find_root(path):
     while True:
         if path == '/' or os.path.ismount(path):

@@ -45,7 +45,6 @@ def _parse_line(line, root):
         'source__tree': tree_symbol not in [' ', '?']
     }
 
-
 def run_command(commands, cwd):
     try:
         p = subprocess.run(commands,
