@@ -55,7 +55,7 @@ class Source(Base):
         context['__proc'] = None
 
         args = dict(enumerate(context['args']))
-        cwd = self.vim.call('getcwd')
+        cwd = os.path.normpath(self.vim.call('getcwd'))
 
         is_all = str(args.get(0, [])) == 'all'
         context['pattern'] = context['input'] if context['input'] else str(args.get(1, ''))
@@ -64,7 +64,7 @@ class Source(Base):
         context['__winid'] = self.vim.call('win_getid')
 
         buftype = self.vim.current.buffer.options['buftype']
-        fullpath = self.vim.call('expand', '%:p')
+        fullpath = os.path.normpath(self.vim.call('expand', '%:p'))
         if fullpath and not buftype and not is_all:
             context['__file'] = os.path.relpath(fullpath, context['__root'])
         else:

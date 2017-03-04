@@ -65,7 +65,7 @@ class Source(Base):
         self.kind = Kind(vim)
 
     def on_init(self, context):
-        cwd = self.vim.call('getcwd')
+        cwd = os.path.normpath(self.vim.call('getcwd'))
 
         context['__root'] = _find_root(cwd)
 
@@ -145,7 +145,7 @@ class Kind(File):
         self.vim.call('easygit#diffShow', prefix + relpath, 'bot split')
 
     def action_reset(self, context):
-        cwd = self.vim.call('getcwd')
+        cwd = os.path.normpath(self.vim.call('getcwd'))
         for target in context['targets']:
             filepath = target['action__path']
             root = target['source__root']
