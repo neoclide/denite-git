@@ -174,6 +174,7 @@ class Kind(File):
                     run_command(['rmtrash', filepath], root)
                 else:
                     self.vim.call('delete', filepath)
+            self.vim.command('checktime')
 
     def action_commit(self, context):
         root = context['targets'][0]['source__root']
