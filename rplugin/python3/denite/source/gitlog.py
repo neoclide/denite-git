@@ -12,6 +12,7 @@ from denite import util, process
 
 from .base import Base
 
+
 def _parse_line(line, gitdir, filepath, winid):
     line = line.replace("'", '', 1)
     line = line.rstrip("'")
@@ -27,6 +28,7 @@ def _parse_line(line, gitdir, filepath, winid):
         'source__winid': winid
     }
 
+
 def _find_root(path):
     while True:
         if path == '/' or os.path.ismount(path):
@@ -35,6 +37,7 @@ def _find_root(path):
         if os.path.isdir(p):
             return path
         path = os.path.dirname(path)
+
 
 class Source(Base):
 
@@ -49,7 +52,6 @@ class Source(Base):
                              '--abbrev-commit', '--date=relative']
         }
         self.kind = Kind(vim)
-
 
     def on_init(self, context):
         context['__proc'] = None
@@ -69,7 +71,6 @@ class Source(Base):
             context['__file'] = os.path.relpath(fullpath, context['__root'])
         else:
             context['__file'] = ''
-
 
     def on_close(self, context):
         if context['__proc']:
@@ -142,8 +143,8 @@ class Kind(Openable):
     def __init__(self, vim):
         super().__init__(vim)
 
-        self.persist_actions += ['reset', 'preview'] #pylint: disable=E1101
-        self.redraw_actions += ['reset'] #pylint: disable=E1101
+        self.persist_actions += ['reset', 'preview']  # pylint: disable=E1101
+        self.redraw_actions += ['reset']  # pylint: disable=E1101
         self.name = 'gitlog'
 
     def action_delete(self, context):
