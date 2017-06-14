@@ -137,15 +137,25 @@ class Kind(File):
     def action_delete(self, context):
         target = context['targets'][0]
         root = target['source__root']
-        relpath = os.path.relpath(target['action__path'], root)
-        prefix = ''
-        if target['source__staged']:
-            if target['source__tree']:
-                if util.input(self.vim, context, 'Diff cached?[y/n]', 'y') == 'y':
+
+        preview_window = self.__get_preview_window()
+        if (preview_window and self._previewed_target == target):
+            self.vim.command('pclose!')
+        else:
+            relpath = os.path.relpath(target['action__path'], root)
+            prefix = ''
+            if target['source__staged']:
+                if target['source__tree']:
+                    if util.input(self.vim, context, 'Diff cached?[y/n]', 'y') == 'y':
+                        prefix = '--cached '
+                else:
                     prefix = '--cached '
-            else:
-                prefix = '--cached '
-        self.vim.call('easygit#diffShow', prefix + relpath, 'bot split')
+            prev_id = self.vim.call('win_getid')
+            self.vim.call('easygit#diffPreview', prefix + relpath)
+
+            self.vim.call('win_gotoid', prev_id)
+            self._previewed_target = target
+
 
     def action_reset(self, context):
         cwd = os.path.normpath(self.vim.call('getcwd'))
