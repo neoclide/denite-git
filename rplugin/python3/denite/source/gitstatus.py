@@ -23,6 +23,7 @@ STATUS_MAP = {
     'U': 'U',
     '?': '?'}
 
+
 def _find_root(path):
     while True:
         if path == '/' or os.path.ismount(path):
@@ -31,6 +32,7 @@ def _find_root(path):
         if os.path.isdir(p):
             return path
         path = os.path.dirname(path)
+
 
 def _parse_line(line, root):
     path = os.path.join(root, line[3:])
@@ -55,6 +57,7 @@ def run_command(commands, cwd, encoding='utf-8'):
         return []
 
     return p.stdout.decode(encoding).split('\n')
+
 
 class Source(Base):
 
@@ -110,8 +113,8 @@ class Kind(File):
     def __init__(self, vim):
         super().__init__(vim)
 
-        self.persist_actions += ['reset', 'add'] #pylint: disable=E1101
-        self.redraw_actions += ['reset', 'add', 'commit'] #pylint: disable=E1101
+        self.persist_actions += ['reset', 'add']  # pylint: disable=E1101
+        self.redraw_actions += ['reset', 'add', 'commit']  # pylint: disable=E1101
         self.name = 'gitstatus'
 
         val = self.vim.call('exists', ':Rm')

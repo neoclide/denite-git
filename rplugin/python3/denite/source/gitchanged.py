@@ -6,6 +6,7 @@
 # pylint: disable=E0401,C0411
 from .line import Source as Base
 
+
 class Source(Base):
 
     def __init__(self, vim):
@@ -15,7 +16,7 @@ class Source(Base):
 
     def on_init(self, context):
         super().on_init(context)
-        #context['__buffer'] = self.vim.current.buffer
+        # context['__buffer'] = self.vim.current.buffer
         buf = self.vim.current.buffer
         context['__gutter'] = buf.vars.get('gitgutter')
 
