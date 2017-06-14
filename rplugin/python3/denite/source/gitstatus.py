@@ -47,17 +47,16 @@ def _parse_line(line, root):
         'source__tree': tree_symbol not in [' ', '?']
     }
 
-
-def run_command(commands, cwd):
+def run_command(commands, cwd, encoding='utf-8'):
     try:
         p = subprocess.run(commands,
                            cwd=cwd,
-                           encoding="utf8",
                            stdout=subprocess.PIPE,
                            stderr=subprocess.STDOUT)
     except subprocess.CalledProcessError:
         return []
-    return p.stdout.split('\n')
+
+    return p.stdout.decode(encoding).split('\n')
 
 
 class Source(Base):
