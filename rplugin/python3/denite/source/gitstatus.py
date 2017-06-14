@@ -125,6 +125,14 @@ class Kind(File):
         else:
             self.remove = 'delete'
 
+    def action_patch(self, context):
+        args = []
+        root = context['targets'][0]['source__root']
+        for target in context['targets']:
+            filepath = target['action__path']
+            args.append(os.path.relpath(filepath, root))
+        self.vim.command('terminal git add ' + ' '.join(args) + ' --patch')
+
     def action_add(self, context):
         args = ['git', 'add']
         root = context['targets'][0]['source__root']

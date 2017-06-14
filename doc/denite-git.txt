@@ -132,6 +132,11 @@ CHANGELOG 					 	*denite-git-changelog*
 
 	- add gitchanged source
 
+0.3 	Jun 14, 2017
+
+	- use diffPreview for diff action of git status
+	- add aptch action for git status
+
 ==============================================================================
 FEEDBACK 					 	*denite-git-feedback*
 
