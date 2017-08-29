@@ -166,7 +166,7 @@ class Kind(File):
 
 
     def action_reset(self, context):
-        cwd = os.path.normpath(self.vim.call('getcwd'))
+        cwd = os.path.normpath(self.vim.eval('expand("%:p:h")'))
         for target in context['targets']:
             filepath = target['action__path']
             root = target['source__root']
