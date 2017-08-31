@@ -57,7 +57,7 @@ class Source(Base):
         context['__proc'] = None
 
         args = dict(enumerate(context['args']))
-        cwd = os.path.normpath(self.vim.call('getcwd'))
+        cwd = os.path.normpath(self.vim.eval('expand("%:p:h")'))
 
         is_all = str(args.get(0, [])) == 'all'
         context['pattern'] = context['input'] if context['input'] else str(args.get(1, ''))
