@@ -5,10 +5,13 @@
 # ============================================================================
 # pylint: disable=E0401,C0411
 import os
+import re
 import subprocess
 from .base import Base as BaseSource
 from ..kind.base import Base as BaseKind
 from denite import util
+
+EMPTY_LINE = re.compile(r"^\s*$")
 
 def _find_root(path):
     while True:
