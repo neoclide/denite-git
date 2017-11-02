@@ -13,6 +13,7 @@ Actions 		|denite-git-actions|
   gitlog 			|denite-gitlog-actions|
   gitstatus 			|denite-gitstatus-actions|
   gitchanged 			|denite-gitchanged-actions|
+  gitbranch 			|denite-gitbranch-actions|
 Changelog 			|denite-git-changelog|
 Feedback 			|denite-feedback|
 
@@ -65,6 +66,10 @@ For gitstatus source: >
 For gitchanged source: >
 
   Denite gitchanged
+
+For gitbranch source: >
+
+  Denite gitbranch
 
 Note: denite-git find git root in the directory of vim current working
 directory ":echo getcwd()"
@@ -120,6 +125,18 @@ GITCHANGED ACTIONS 				*denite-gitchanged-actions*
 
 open (default)
 		open seleted line in current buffer.
+
+------------------------------------------------------------------------------
+GITBRANCH ACTIONS 				*denite-gitbranch-actions*
+
+open (default)
+		Checkout seleted branch in current buffer.
+
+delete
+		Delete seleted branch.
+
+merge
+		Merge seleted branch.
 
 ==============================================================================
 CHANGELOG 					 	*denite-git-changelog*
