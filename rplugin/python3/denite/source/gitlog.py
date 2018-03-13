@@ -177,11 +177,11 @@ class Kind(Openable):
             option = {
                 'all': 1 if is_all else 0,
                 'gitdir': gitdir,
+                'fold': 0
             }
             if not is_all:
                 option['file'] = target['source__file']
             self.vim.call('easygit#show', commit, option)
-            self.vim.command('set nofen')
 
     def __get_preview_window(self):
         return next(filterfalse(lambda x:
@@ -212,5 +212,4 @@ class Kind(Openable):
         self.vim.call('easygit#show', commit, option)
         self.vim.command('set previewwindow')
         self.vim.command('wincmd P')
-        self.vim.command('set nofen')
         self.vim.call('win_gotoid', prev_id)
