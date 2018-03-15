@@ -68,7 +68,7 @@ class Source(Base):
         self.kind = Kind(vim)
 
     def on_init(self, context):
-        cwd = os.path.normpath(self.vim.eval('expand("%:p:h")'))
+        cwd = os.path.normpath(self.vim.eval('getcwd()'))
 
         context['__root'] = _find_root(cwd)
 

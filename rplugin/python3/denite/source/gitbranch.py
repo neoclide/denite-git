@@ -24,7 +24,7 @@ def _find_root(path):
 
 
 def _parse_line(line, root):
-    path = os.path.join(root, line[3:])
+    #path = os.path.join(root, line[3:])
     current_symbol = line[0]
     return {
         'word': line,
@@ -55,7 +55,7 @@ class Source(BaseSource):
         self.kind = Kind(vim)
 
     def on_init(self, context):
-        cwd = os.path.normpath(self.vim.eval('expand("%:p:h")'))
+        cwd = os.path.normpath(self.vim.eval('getcwd()'))
 
         context['__root'] = _find_root(cwd)
 
