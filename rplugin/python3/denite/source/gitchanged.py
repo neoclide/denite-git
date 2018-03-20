@@ -17,6 +17,8 @@ class Source(Base):
         super().on_init(context)
         # context['__buffer'] = self.vim.current.buffer
         buf = self.vim.current.buffer
+        context['__bufnr'] = buf.number
+        context['__bufname'] = buf.name
         context['__gutter'] = buf.vars.get('gitgutter')
 
     def gather_candidates(self, context):
@@ -32,12 +34,14 @@ class Source(Base):
 
         for [i, x] in enumerate(self.vim.call(
                 'getbufline', context['__bufnr'], 1, '$')):
-            if i in changed:
+            # vim line number start from 1
+            vim_line_num = i + 1
+            if vim_line_num in changed:
                 lines.append({
                     'word': x,
-                    'abbr': (fmt % (i + 1, x)),
+                    'abbr': (fmt % (vim_line_num, x)),
                     'action__path': context['__bufname'],
-                    'action__line': (i + 1)
+                    'action__line': vim_line_num
                     })
 
         return lines
