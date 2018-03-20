@@ -1,6 +1,6 @@
 # Denite-git
 
-[![](http://img.shields.io/github/issues/chemzqm/denite-git.svg)](https://github.com/chemzqm/denite-git/issues)
+[![](http://img.shields.io/github/issues/neoclide/denite-git.svg)](https://github.com/neoclide/denite-git/issues)
 [![](http://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![](https://img.shields.io/badge/doc-%3Ah%20denite--git.txt-red.svg)](doc/denite-git.txt)
 
