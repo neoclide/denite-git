@@ -212,4 +212,6 @@ class Kind(Openable):
         self.vim.call('easygit#show', commit, option)
         self.vim.command('set previewwindow')
         self.vim.command('wincmd P')
+        if not is_all:
+            self.vim.command('set nofen')
         self.vim.call('win_gotoid', prev_id)
