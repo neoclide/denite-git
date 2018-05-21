@@ -8,6 +8,7 @@ import os
 import re
 import subprocess
 import shlex
+from itertools import filterfalse
 from .base import Base
 from denite import util
 from ..kind.file import Kind as File
@@ -116,6 +117,7 @@ class Kind(File):
         self.persist_actions += ['reset', 'add']  # pylint: disable=E1101
         self.redraw_actions += ['reset', 'add', 'commit']  # pylint: disable=E1101
         self.name = 'gitstatus'
+        self._previewed_target = None
 
         val = self.vim.call('exists', ':Rm')
         if val == 2:
@@ -140,6 +142,11 @@ class Kind(File):
             filepath = target['action__path']
             args.append(os.path.relpath(filepath, root))
         run_command(args, root)
+
+    def __get_preview_window(self):
+        return next(filterfalse(lambda x:
+                                not x.options['previewwindow'],
+                                self.vim.windows), None)
 
     # diff action
     def action_delete(self, context):
