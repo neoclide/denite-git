@@ -84,9 +84,10 @@ Actions of gitstatus:
 
 Actions of gitbranch:
 
-* `open` default action to checkout selected branch.
+* `checkout` default action to checkout selected branch.
 * `delete` delete seleted branch.
 * `merge` merge seleted branch with current branch.
+* `rebase` rebase seleted branch with current branch.
 
 ## Key Mapppings
 

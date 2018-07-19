@@ -1,6 +1,6 @@
 *denite-git.txt*	Git log and git status sources for |denite|
 
-Version: 0.2
+Version: 0.4
 Author:  Qiming Zhao <chemzqm at gmail.com>
 License: MIT license
 
@@ -129,7 +129,7 @@ open (default)
 ------------------------------------------------------------------------------
 GITBRANCH ACTIONS 				*denite-gitbranch-actions*
 
-open (default)
+checkout (default)
 		Checkout seleted branch in current buffer.
 
 delete
@@ -138,21 +138,29 @@ delete
 merge
 		Merge seleted branch.
 
+rebase
+
+		Rebase seleted branch with current branch.
+
 ==============================================================================
 CHANGELOG 					 	*denite-git-changelog*
 
-0.1     Feb 24, 2017
+0.4 	Jul 19, 2018
 
-	- works
-
-0.2 	Feb 25, 2017
-
-	- add gitchanged source
+	- reload buffers after branch action
 
 0.3 	Jun 14, 2017
 
 	- use diffPreview for diff action of git status
 	- add aptch action for git status
+
+0.2 	Feb 25, 2017
+
+	- add gitchanged source
+
+0.1     Feb 24, 2017
+
+	- works
 
 ==============================================================================
 FEEDBACK 					 	*denite-git-feedback*
