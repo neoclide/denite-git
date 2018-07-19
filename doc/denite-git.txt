@@ -28,20 +28,18 @@ INSTALL 					 	*denite-git-install*
 
 Make sure you have "echo has('python3')" return 1 before useing |denite|.
 
-denite.nvim is required for provide union interface and vim-easygit is
+denite.nvim is required for provide union interface and fugitive is
 required to perform git command in vim.
 
 Take [vim-plug](https://github.com/junegunn/vim-plug) for example, add: >
 
     Plug 'Shougo/denite.nvim'
-    Plug 'chemzqm/vim-easygit'
-    Plug 'chemzqm/denite-git'
+    Plug 'tpope/vim-fugitive'
+    Plug 'neoclide/denite-git'
 
 To your .vimrc and run "PlugInstall" after vim restarted.
 
 Run "UpdateRemotePlugins" command after denite.nvim installed.
-
-Note: |easygit| have some issue of windows support.
 
 Note: |denite-git| requires python >= 3.5.
 

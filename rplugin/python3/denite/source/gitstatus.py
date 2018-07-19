@@ -35,7 +35,7 @@ def _find_root(path):
         path = os.path.dirname(path)
 
 
-def _parse_line(line, root):
+def _parse_line(line, root, winnr):
     path = os.path.join(root, line[3:])
     index_symbol = STATUS_MAP[line[0]]
     tree_symbol = STATUS_MAP[line[1]]
@@ -44,6 +44,7 @@ def _parse_line(line, root):
         'word': word,
         'action__path': path,
         'source__root': root,
+        'Source__winnr': winnr,
         'source__staged': index_symbol not in [' ', '?'],
         'source__tree': tree_symbol not in [' ', '?']
     }
@@ -67,11 +68,14 @@ class Source(Base):
 
         self.name = 'gitstatus'
         self.kind = Kind(vim)
+        self.is_public_context = True
 
     def on_init(self, context):
         cwd = os.path.normpath(self.vim.eval('getcwd()'))
+        winnr = self.vim.call('winnr')
 
         context['__root'] = _find_root(cwd)
+        context['__winnr'] = winnr
 
     def highlight(self):
         self.vim.command('highlight deniteGitStatusAdd guifg=#009900 ctermfg=2')
@@ -95,6 +99,7 @@ class Source(Base):
 
     def gather_candidates(self, context):
         root = context['__root']
+        winnr = context['__winnr']
         if not root:
             return []
         args = ['git', 'status', '--porcelain', '-uall']
@@ -105,7 +110,7 @@ class Source(Base):
         for line in lines:
             if EMPTY_LINE.fullmatch(line):
                 continue
-            candidates.append(_parse_line(line, root))
+            candidates.append(_parse_line(line, root, winnr))
 
         return candidates
 
@@ -114,7 +119,7 @@ class Kind(File):
     def __init__(self, vim):
         super().__init__(vim)
 
-        self.persist_actions += ['reset', 'add']  # pylint: disable=E1101
+        self.persist_actions += ['reset', 'add', 'delete']  # pylint: disable=E1101
         self.redraw_actions += ['reset', 'add', 'commit']  # pylint: disable=E1101
         self.name = 'gitstatus'
         self._previewed_target = None
@@ -152,25 +157,30 @@ class Kind(File):
     def action_delete(self, context):
         target = context['targets'][0]
         root = target['source__root']
+        winnr = target['Source__winnr']
+        gitdir = os.path.join(target['source__root'], '.git')
 
         preview_window = self.__get_preview_window()
-        if (preview_window and self._previewed_target == target):
+
+        if preview_window:
             self.vim.command('pclose!')
-        else:
-            relpath = os.path.relpath(target['action__path'], root)
-            prefix = ''
-            if target['source__staged']:
-                if target['source__tree']:
-                    if util.input(self.vim, context, 'Diff cached?[y/n]', 'y') == 'y':
-                        prefix = '--cached '
-                else:
+            if self._previewed_target == target:
+                return
+
+        relpath = os.path.relpath(target['action__path'], root)
+        prefix = ''
+        if target['source__staged']:
+            if target['source__tree']:
+                if util.input(self.vim, context, 'Diff cached?[y/n]', 'y') == 'y':
                     prefix = '--cached '
-            prev_id = self.vim.call('win_getid')
-            self.vim.call('easygit#diffPreview', prefix + relpath)
+            else:
+                prefix = '--cached '
+        prev_id = self.vim.call('win_getid')
+        self.vim.command(str(winnr) + 'wincmd w')
+        self.vim.call('denite#git#diffPreview', prefix, relpath, gitdir)
 
-            self.vim.call('win_gotoid', prev_id)
-            self._previewed_target = target
-
+        self.vim.call('win_gotoid', prev_id)
+        self._previewed_target = target
 
     def action_reset(self, context):
         cwd = os.path.normpath(self.vim.eval('expand("%:p:h")'))
@@ -203,9 +213,9 @@ class Kind(File):
 
     def action_commit(self, context):
         root = context['targets'][0]['source__root']
-        args = ['-v']
+        files = []
         for target in context['targets']:
             filepath = target['action__path']
-            path = os.path.relpath(filepath, root)
-            args.append(path)
-        self.vim.call('easygit#commit', ' '.join(args))
+            files.append(os.path.relpath(filepath, root))
+        self.vim.call('denite#git#commit', '-v', files)
+

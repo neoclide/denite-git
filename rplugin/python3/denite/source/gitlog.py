@@ -143,20 +143,32 @@ class Kind(Openable):
     def __init__(self, vim):
         super().__init__(vim)
 
-        self.persist_actions += ['reset', 'preview']  # pylint: disable=E1101
-        self.redraw_actions += ['reset']  # pylint: disable=E1101
+        self.persist_actions = ['reset', 'preview']
+        self.redraw_actions = ['reset']
         self.name = 'gitlog'
 
     def action_delete(self, context):
-        for target in context['targets']:
-            commit = target['source__commit']
-            winid = target['source__winid']
-            self.vim.call('win_gotoid', winid)
-            self.vim.call('easygit#diffThis', commit)
+        target = context['targets'][0]
+        commit = target['source__commit']
+        bufname = '[Git %s]' % (commit)
+        if self.vim.call('bufexists', bufname):
+            bufnr = self.vim.call('bufnr', bufname)
+            self.vim.command('bdelete ' + str(bufnr))
+            return
+
+        winid = target['source__winid']
+        self.vim.call('win_gotoid', winid)
+        option = {
+                'gitdir': target['source__gitdir'],
+                'edit': 'vsplit'
+                }
+        self.vim.call('denite#git#diffCurrent', commit, option)
 
     def action_reset(self, context):
         target = context['targets'][0]
         commit = target['source__commit']
+        gitdir = target['source__gitdir']
+
         c = util.input(self.vim, context, 'Reset mode mixed|soft|hard [m/s/h]: ')
         opt = ''
         if c == 'm':
@@ -167,21 +179,23 @@ class Kind(Openable):
             opt = '--hard'
         else:
             return
-        self.vim.call('easygit#reset', opt + ' ' + commit)
+        self.vim.call('denite#git#reset', opt + ' ' + commit, gitdir)
 
     def action_open(self, context):
-        for target in context['targets']:
-            commit = target['source__commit']
-            gitdir = target['source__gitdir']
-            is_all = True if not target['source__file'] else False
-            option = {
+        target = context['targets'][0]
+        commit = target['source__commit']
+        gitdir = target['source__gitdir']
+        winid = target['source__winid']
+        is_all = True if not target['source__file'] else False
+        option = {
                 'all': 1 if is_all else 0,
                 'gitdir': gitdir,
                 'fold': 0
-            }
-            if not is_all:
-                option['file'] = target['source__file']
-            self.vim.call('easygit#show', commit, option)
+                }
+        if not is_all:
+            option['file'] = target['source__file']
+        self.vim.call('win_gotoid', winid)
+        self.vim.call('denite#git#show', commit, option)
 
     def __get_preview_window(self):
         return next(filterfalse(lambda x:
@@ -201,17 +215,19 @@ class Kind(Openable):
                 return
 
         prev_id = self.vim.call('win_getid')
+        winid = target['source__winid']
+        self.vim.call('win_gotoid', winid)
         is_all = True if not target['source__file'] else False
         option = {
             'all': 1 if is_all else 0,
-            'edit': 'abo 20split',
+            'edit': 'vnew',
             'gitdir': gitdir
         }
         if not is_all:
             option['file'] = target['source__file']
-        self.vim.call('easygit#show', commit, option)
-        self.vim.command('set previewwindow')
-        self.vim.command('wincmd P')
+        self.vim.call('denite#git#show', commit, option)
+        self.vim.command('setl previewwindow')
         if not is_all:
             self.vim.command('set nofen')
         self.vim.call('win_gotoid', prev_id)
+
