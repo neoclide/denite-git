@@ -59,6 +59,12 @@ Denite gitchanged
 
 `gitchanged` source is just simple line source.
 
+For git branch
+
+```
+Denite gitbranch
+```
+
 ## Actions
 
 Actions of gitlog:
@@ -68,13 +74,19 @@ Actions of gitlog:
 * `delete` run git diff with current commit for current buffer. (just named delete)
 * `reset` run git reset with current commit.
 
-Actions of git status:
+Actions of gitstatus:
 
 * `open` open seleted file, default action
 * `add` run git add for seleted file(s).
 * `delete` run git diff for seleted file. (just named delete)
 * `reset` run git reset/checkout or remove for seleted file(s).
 * `commit` run git commit for seleted file(s).
+
+Actions of gitbranch:
+
+* `open` default action to checkout selected branch.
+* `delete` delete seleted branch.
+* `merge` merge seleted branch with current branch.
 
 ## Key Mapppings
 
