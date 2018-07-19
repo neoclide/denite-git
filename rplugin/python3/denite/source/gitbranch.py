@@ -14,16 +14,6 @@ from denite import util
 EMPTY_LINE = re.compile(r"^\s*$")
 
 
-def _find_root(path):
-    while True:
-        if path == '/' or os.path.ismount(path):
-            return None
-        p = os.path.join(path, '.git')
-        if os.path.isdir(p):
-            return path
-        path = os.path.dirname(path)
-
-
 def _parse_line(line, root):
     current_symbol = line[0]
     return {
@@ -57,9 +47,8 @@ class Source(BaseSource):
         self.kind = Kind(vim)
 
     def on_init(self, context):
-        cwd = os.path.normpath(self.vim.eval('getcwd()'))
-
-        context['__root'] = _find_root(cwd)
+        gitdir = self.vim.call('denite#git#gitdir')
+        context['__root'] = '' if not gitdir else os.path.dirname(gitdir)
 
     def gather_candidates(self, context):
         root = context['__root']

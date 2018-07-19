@@ -29,16 +29,6 @@ def _parse_line(line, gitdir, filepath, winid):
     }
 
 
-def _find_root(path):
-    while True:
-        if path == '/' or os.path.ismount(path):
-            return None
-        p = os.path.join(path, '.git')
-        if os.path.isdir(p):
-            return path
-        path = os.path.dirname(path)
-
-
 class Source(Base):
 
     def __init__(self, vim):
@@ -55,16 +45,17 @@ class Source(Base):
 
     def on_init(self, context):
         context['__proc'] = None
+        context['__root'] = None
 
         args = dict(enumerate(context['args']))
-        cwd = os.path.normpath(self.vim.eval('getcwd()'))
+        gitdir = self.vim.call('denite#git#gitdir')
+        if not gitdir:
+            return
 
         is_all = str(args.get(0, [])) == 'all'
         context['pattern'] = context['input'] if context['input'] else str(args.get(1, ''))
-
-        context['__root'] = _find_root(cwd)
+        context['__root'] = os.path.dirname(gitdir)
         context['__winid'] = self.vim.call('win_getid')
-
         buftype = self.vim.current.buffer.options['buftype']
         fullpath = os.path.normpath(self.vim.call('expand', '%:p'))
         if fullpath and not buftype and not is_all:

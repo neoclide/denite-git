@@ -1,5 +1,14 @@
 let s:fugitive = get(g:, 'loaded_fugitive', 0)
 
+function! denite#git#gitdir() abort
+  let gitdir = get(b:, 'git_dir', '')
+  if !empty(gitdir) | return gitdir | endif
+  let path = empty(bufname('%')) ? getcwd() : expand('%:p')
+  let dir = finddir('.git', path.';')
+  if empty(dir) | return '' | endif
+  return fnamemodify(dir, ':p:h')
+endfunction
+
 function! denite#git#commit(prefix, files) abort
   if s:fugitive
     execute 'Gcommit '.a:prefix .' ' . join(map(a:files, 'fnameescape(v:val)'), ' ')

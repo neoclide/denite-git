@@ -25,16 +25,6 @@ STATUS_MAP = {
     '?': '?'}
 
 
-def _find_root(path):
-    while True:
-        if path == '/' or os.path.ismount(path):
-            return None
-        p = os.path.join(path, '.git')
-        if os.path.isdir(p):
-            return path
-        path = os.path.dirname(path)
-
-
 def _parse_line(line, root, winnr):
     path = os.path.join(root, line[3:])
     index_symbol = STATUS_MAP[line[0]]
@@ -48,6 +38,7 @@ def _parse_line(line, root, winnr):
         'source__staged': index_symbol not in [' ', '?'],
         'source__tree': tree_symbol not in [' ', '?']
     }
+
 
 def run_command(commands, cwd, encoding='utf-8'):
     try:
@@ -71,10 +62,10 @@ class Source(Base):
         self.is_public_context = True
 
     def on_init(self, context):
-        cwd = os.path.normpath(self.vim.eval('getcwd()'))
         winnr = self.vim.call('winnr')
 
-        context['__root'] = _find_root(cwd)
+        gitdir = self.vim.call('denite#git#gitdir')
+        context['__root'] = '' if not gitdir else os.path.dirname(gitdir)
         context['__winnr'] = winnr
 
     def highlight(self):
