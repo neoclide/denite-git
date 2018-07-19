@@ -1,4 +1,3 @@
-let s:fugitive = get(g:, 'loaded_fugitive', 0)
 
 function! denite#git#gitdir() abort
   let gitdir = get(b:, 'git_dir', '')
@@ -10,10 +9,12 @@ function! denite#git#gitdir() abort
 endfunction
 
 function! denite#git#commit(prefix, files) abort
-  if s:fugitive
+  if get(g:, 'loaded_fugitive', 0)
     execute 'Gcommit '.a:prefix .' ' . join(map(a:files, 'fnameescape(v:val)'), ' ')
-  else
+  else if get(g:, 'did_easygit_loaded', 0)
     call easygit#commit(prefix . ' '. join(a:files, ' '))
+  else
+    execute 'terminal  git commit '.a:prefix. ' '. join(map(a:files, 'fnameescape(v:val)'), ' ')
   endif
 endfunction
 

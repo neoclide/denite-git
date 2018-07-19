@@ -6,6 +6,7 @@
 # pylint: disable=E0401,C0411
 from .line import Source as Base
 
+
 class Source(Base):
 
     def __init__(self, vim):

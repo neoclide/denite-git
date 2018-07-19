@@ -19,13 +19,11 @@ Video of denite gitstatus:
 For user of [vim-plug](https://github.com/junegunn/vim-plug), add:
 
     Plug 'Shougo/denite.nvim'
-    Plug 'tpope/vim-fugitive'
     Plug 'chemzqm/denite-git'
 
 For user of [dein.vim](https://github.com/Shougo/dein.vim), add:
 
     call dein#add('Shougo/denite.nvim')
-    call dein#add('tpope/vim-fugitive')
     call dein#add('chemzqm/denite-git')
 
 to your vimrc and run `PlugInstall` if needed.
