@@ -82,17 +82,18 @@ class Kind(BaseKind):
     def __init__(self, vim):
         super().__init__(vim)
 
-        self.persist_actions += ['open', 'delete']  # pylint: disable=E1101
-        self.redraw_actions += ['open', 'delete']  # pylint: disable=E1101
+        self.persist_actions += []  # pylint: disable=E1101
+        self.redraw_actions += []  # pylint: disable=E1101
         self.name = 'gitbranch'
-        self.default_action = 'open'
+        self.default_action = 'checkout'
 
-    def action_open(self, context):
+    def action_checkout(self, context):
         target = context['targets'][0]
         branch = target['source__branch']
         args = ['git', 'checkout', branch]
         root = target['source__root']
         run_command(args, root)
+        self.vim.command('bufdo e')
 
     def action_delete(self, context):
         target = context['targets'][0]
@@ -114,6 +115,7 @@ class Kind(BaseKind):
 
         if len(args) > 0:
             run_command(args, root)
+            self.vim.command('bufdo e')
 
     def action_merge(self, context):
         target = context['targets'][0]
@@ -123,6 +125,7 @@ class Kind(BaseKind):
 
         if not target['source__current']:
             run_command(args, root)
+            self.vim.command('bufdo e')
 
     def action_rebase(self, context):
         target = context['targets'][0]
@@ -132,4 +135,5 @@ class Kind(BaseKind):
 
         if not target['source__current']:
             run_command(args, root)
+            self.vim.command('bufdo e')
 
