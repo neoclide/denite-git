@@ -9,7 +9,6 @@ import re
 import subprocess
 from .base import Base as BaseSource
 from ..kind.base import Base as BaseKind
-from ..kind.openable import Kind as Openable
 from denite import util
 from denite.util import debug
 
@@ -35,37 +34,46 @@ class Source(BaseSource):
         self.kind = GitObject(vim)
 
     def on_init(self, context):
-        winnr = self.vim.call('winnr')
-
+        args = dict(enumerate(context['args']))
+        branch = str(args.get(0, "master"))
         gitdir = self.vim.call('denite#git#gitdir')
         context['__root'] = '' if not gitdir else os.path.dirname(gitdir)
-        context['__winnr'] = winnr
+        context['__branch'] = branch
 
     def gather_candidates(self, context):
-        args = ['git', 'ls-tree', '-r', 'master']
+        branch = context['__branch']
+        args = ['git', 'ls-tree', '-r', branch]
         root = context['__root']
-        self.print_message(context, ' '.join(args))
         lines = run_command(args, root)
-        return [self._parse_line(line, root) for line in lines if not EMPTY_LINE.fullmatch(line)]
+        return [self._parse_line(line, root, branch) for line in lines if not EMPTY_LINE.fullmatch(line)]
 
-    def _parse_line(self, line, root):
+    def _parse_line(self, line, root, branch):
         parts = line.split("\t", 1)
         filename = parts[1]
         obj_sha = parts[0].split(" ")[2]
         path = os.path.join(root, filename)
         return {
-                'word': obj_sha,
+            'branch': branch,
+            'hash': obj_sha,
+                'word': path,
                 'abbr': path
                 }
 
 
-class GitObject(Openable):
+class GitObject(BaseKind):
     def __init__(self, vim):
         super().__init__(vim)
+        self.name = 'git_object'
+        self.default_action = 'view'
 
-    def action_open(self, context):
-        debug(self.vim, context)
+    def action_view(self, context):
         target = context['targets'][0]
-        obj_sha = target["word"]
-        self.vim.command("new | r !git cat-file -p " + obj_sha)
+        obj_sha = target["hash"]
+        branch = target['branch']
+        self.vim.command("new | read ! git cat-file -p " + obj_sha )
+        del self.vim.current.buffer[0] #need to remove the first line since 'read' insert a new line at the top
+        self.vim.command("setl buftype=nofile nomodifiable bufhidden=wipe nobuflisted") #user a scratch buffer
+        filename = os.path.basename(target["abbr"])
+        self.vim.command("file (" + branch + ") " + filename)
+        self.vim.command("filetype detect")
 
