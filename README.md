@@ -63,6 +63,20 @@ For git branch
 Denite gitbranch
 ```
 
+For git files
+```vim
+" view different versions of files on different branches (or commits, or tags)
+Denite gitfiles
+
+" all files in repo on master
+Denite gitfiles:master
+
+" all files in repo as of sha 31a3b3
+Denite gitfiles:31a3b3
+
+```
+
+
 ## Actions
 
 Actions of gitlog:
@@ -86,6 +100,9 @@ Actions of gitbranch:
 * `delete` delete seleted branch.
 * `merge` merge seleted branch with current branch.
 * `rebase` rebase seleted branch with current branch.
+
+Actions of gitfiles:
+* `view` default action to view a file at a certain commit (read-only)
 
 ## Key Mapppings
 
