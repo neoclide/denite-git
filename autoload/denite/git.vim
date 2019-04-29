@@ -11,8 +11,8 @@ endfunction
 function! denite#git#commit(prefix, files) abort
   if get(g:, 'loaded_fugitive', 0)
     execute 'Gcommit '.a:prefix .' ' . join(map(a:files, 'fnameescape(v:val)'), ' ')
-  else if get(g:, 'did_easygit_loaded', 0)
-    call easygit#commit(prefix . ' '. join(a:files, ' '))
+  elseif get(g:, 'did_easygit_loaded', 0)
+    call easygit#commit(a:prefix . ' '. join(a:files, ' '))
   else
     execute 'terminal  git commit '.a:prefix. ' '. join(map(a:files, 'fnameescape(v:val)'), ' ')
   endif
