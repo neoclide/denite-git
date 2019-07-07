@@ -172,7 +172,7 @@ class Kind(Openable):
             return
         self.vim.call('denite#git#reset', opt + ' ' + commit, gitdir)
 
-    def action_open(self, context):
+    def action_open(self, context, split=None):
         target = context['targets'][0]
         commit = target['source__commit']
         gitdir = target['source__gitdir']
@@ -183,10 +183,18 @@ class Kind(Openable):
                 'gitdir': gitdir,
                 'fold': 0
                 }
+        if split is not None:
+            option['edit'] = split
         if not is_all:
             option['file'] = target['source__file']
         self.vim.call('win_gotoid', winid)
         self.vim.call('denite#git#show', commit, option)
+
+    def action_split(self, context):
+        return self.action_open(context, 'split')
+
+    def action_vsplit(self, context):
+        return self.action_open(context, 'vsplit')
 
     def __get_preview_window(self):
         return next(filterfalse(lambda x:
