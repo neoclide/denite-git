@@ -215,13 +215,12 @@ class Kind(Openable):
 
         prev_id = self.vim.call('win_getid')
         winid = target['source__winid']
-        self.vim.call('win_gotoid', winid)
         is_all = True if not target['source__file'] else False
         option = {
             'all': 1 if is_all else 0,
-            'edit': 'vnew',
             'gitdir': gitdir
         }
+        option['edit'] = 'vsplit' if context['vertical_preview'] else 'split'
         if not is_all:
             option['file'] = target['source__file']
         self.vim.call('denite#git#show', commit, option)
