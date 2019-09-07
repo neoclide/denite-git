@@ -2,7 +2,7 @@
 function! denite#git#gitdir() abort
   let gitdir = get(b:, 'git_dir', '')
   if !empty(gitdir) | return gitdir | endif
-  let path = (empty(bufname('%')) || &buftype =~# '^\%(nofile\|acwrite\|quickfix\|terminal\)$')) ? getcwd() : expand('%:p')
+  let path = (empty(bufname('%')) || &buftype =~# '^\%(nofile\|acwrite\|quickfix\|terminal\)$') ? getcwd() : expand('%:p')
   let dir = finddir('.git', path.';')
   if empty(dir) | return '' | endif
   let files = findfile('.git', path.';',-1)
