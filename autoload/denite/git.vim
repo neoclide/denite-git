@@ -7,7 +7,7 @@ function! denite#git#gitdir() abort
   if empty(dir) | return '' | endif
   let files = findfile('.git', path.';',-1)
   if empty(files) | return fnamemodify(dir, ':p:h') | endif
-  return fnamemodify(remove(files,-1), ':p:h')
+  return fnamemodify(files[-1], ':p')
 endfunction
 
 function! denite#git#commit(prefix, files) abort
