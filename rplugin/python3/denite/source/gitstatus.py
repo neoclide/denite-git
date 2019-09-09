@@ -17,6 +17,7 @@ EMPTY_LINE = re.compile(r"^\s*$")
 STATUS_MAP = {
     ' ': ' ',
     'M': '~',
+    'T': '~',
     'A': '+',
     'D': '-',
     'R': '→',

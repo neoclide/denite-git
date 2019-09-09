@@ -2,10 +2,12 @@
 function! denite#git#gitdir() abort
   let gitdir = get(b:, 'git_dir', '')
   if !empty(gitdir) | return gitdir | endif
-  let path = empty(bufname('%')) ? getcwd() : expand('%:p')
+  let path = (empty(bufname('%')) || &buftype =~# '^\%(nofile\|acwrite\|quickfix\|terminal\)$') ? getcwd() : expand('%:p')
   let dir = finddir('.git', path.';')
   if empty(dir) | return '' | endif
-  return fnamemodify(dir, ':p:h')
+  let files = findfile('.git', path.';',-1)
+  if empty(files) | return fnamemodify(dir, ':p:h') | endif
+  return fnamemodify(files[-1], ':p')
 endfunction
 
 function! denite#git#commit(prefix, files) abort
