@@ -76,20 +76,18 @@ class Source(Base):
 
     def define_syntax(self):
         self.vim.command('syntax case ignore')
-        self.vim.command(r'syntax match deniteSource__gitlogHeader /^.*$/ '
-                         r'containedin=' + self.syntax_name)
 
         self.vim.command(r'syntax match deniteSource__gitlogRef /\v((\*\||)\s)@<=[0-9A-Za-z]{7,13}(\s-\s)@=/ '
                          r'contained containedin=deniteSource__gitlogHeader '
                          r'nextgroup=deniteSource__gitlogTag,deniteSource__gitlogTime')
         self.vim.command(r'syntax match deniteSource__gitlogTag /(.\{-}tag:\s.\{-})/ contained '
-                         r'containedin=deniteSource__gitlogHeader '
+                         r'containedin=' + self.syntax_name + ' '
                          r'nextgroup=deniteSource__gitlogTime')
         self.vim.command(r'syntax match deniteSource__gitlogTime /([^)]\{-}\sago)/ contained '
-                         r'containedin=deniteSource__gitlogHeader '
+                         r'containedin=' + self.syntax_name + ' '
                          r'nextgroup=deniteSource__gitlogUser')
         self.vim.command(r'syntax match deniteSource__gitlogUser /\v\<[^<]+\>$/ contained '
-                         r'containedin=deniteSource__gitlogHeader')
+                         r'containedin=' + self.syntax_name)
 
     def gather_candidates(self, context):
         if context['__proc']:
