@@ -99,6 +99,7 @@ function! denite#git#show(args, option)
            \ 'width': a:option.preview_width,
            \ 'height': a:option.preview_height,
            \ })
+        doautocmd User denite-preview
   endif
   call setpos('.', [bufnr('%'), 7, 0, 0])
   exe 'nnoremap <buffer> <silent> u :call <SID>ShowParentCommit()<cr>'
