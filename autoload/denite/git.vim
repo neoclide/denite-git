@@ -91,6 +91,15 @@ function! denite#git#show(args, option)
   if !showall
     setl nofoldenable
   endif
+  if a:option.floating_preview && exists('*nvim_win_set_config')
+      call nvim_win_set_config(win_getid(), {
+           \ 'relative': 'editor',
+           \ 'row': a:option.preview_win_row,
+           \ 'col': a:option.preview_win_col,
+           \ 'width': a:option.preview_width,
+           \ 'height': a:option.preview_height,
+           \ })
+  endif
   call setpos('.', [bufnr('%'), 7, 0, 0])
   exe 'nnoremap <buffer> <silent> u :call <SID>ShowParentCommit()<cr>'
   exe 'nnoremap <buffer> <silent> d :call <SID>ShowNextCommit()<cr>'

@@ -219,6 +219,14 @@ class Kind(Openable):
             'gitdir': gitdir
         }
         option['edit'] = 'vsplit' if context['vertical_preview'] else 'split'
+        option['floating_preview'] = int(context['floating_preview'])
+        if option['floating_preview'] == 1:
+            pos = self.vim.call('win_screenpos', prev_id)
+            winwidth = self.vim.call('winwidth', 0)
+            option['preview_win_row'] = pos[0] - 1
+            option['preview_win_col'] = (pos[1] - 1) + winwidth - context['preview_width']
+            option['preview_width'] = context['preview_width']
+            option['preview_height'] = context['preview_height']
         if not is_all:
             option['file'] = target['source__file']
         self.vim.call('denite#git#show', commit, option)
