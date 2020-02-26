@@ -91,7 +91,7 @@ function! denite#git#show(args, option)
   if !showall
     setl nofoldenable
   endif
-  if a:option.floating_preview && exists('*nvim_win_set_config')
+  if get(a:option, 'floating_preview', 0) && exists('*nvim_win_set_config')
       call nvim_win_set_config(win_getid(), {
            \ 'relative': 'editor',
            \ 'row': a:option.preview_win_row,
