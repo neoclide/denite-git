@@ -92,14 +92,18 @@ class Kind(BaseKind):
 
         if target['source__remote']:
             branchname = branch.split('/')[-1]
-            confirm = util.input(
-                    self.vim, context, 'Delete remote branch '
-                    + branchname + '? [y/n] : ', 'n') == 'y'
+
+            confirm = str(self.vim.call('denite#util#input',
+                            'Delete remote branch ' + branchname + '? [y/n] : ',
+                            'n',
+                            '')) == 'y'
             if confirm:
                 args = ['git', 'push', 'origin', '--delete', branchname]
         else:
-            force = util.input(
-                    self.vim, context, 'Force delete? [y/n] : ', 'n') == 'y'
+            force = str(self.vim.call('denite#util#input',
+                            'Force delete? [y/n] : ',
+                            'n',
+                            '')) == 'y'
             args = ['git', 'branch', '-D' if force else '-d', branch]
 
         if len(args) > 0:

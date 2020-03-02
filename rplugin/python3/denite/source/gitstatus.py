@@ -163,7 +163,11 @@ class Kind(File):
         prefix = ''
         if target['source__staged']:
             if target['source__tree']:
-                if util.input(self.vim, context, 'Diff cached?[y/n]', 'y') == 'y':
+                confirmed = str(self.vim.call('denite#util#input',
+                                'Diff cached?[y/n]',
+                                'y',
+                                '')) == 'y'
+                if confirmed == 'y':
                     prefix = '--cached '
             else:
                 prefix = '--cached '
@@ -181,7 +185,10 @@ class Kind(File):
             root = target['source__root']
             path = os.path.relpath(filepath, root)
             if target['source__tree'] and target['source__staged']:
-                res = util.input(self.vim, context, 'Select action reset or checkout [r/c]')
+                res = str(self.vim.call('denite#util#input',
+                                'Select action reset or checkout [r/c]',
+                                '',
+                                ''))
                 if res == 'c':
                     args = 'git checkout -- ' + path
                     run_command(shlex.split(args), root)
