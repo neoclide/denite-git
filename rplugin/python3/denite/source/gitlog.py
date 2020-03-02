@@ -158,7 +158,10 @@ class Kind(Openable):
         commit = target['source__commit']
         gitdir = target['source__gitdir']
 
-        c = util.input(self.vim, context, 'Reset mode mixed|soft|hard [m/s/h]: ')
+        c = str(self.vim.call('denite#util#input',
+                        'Reset mode mixed|soft|hard [m/s/h]: ',
+                        '',
+                        ''))
         opt = ''
         if c == 'm':
             opt = '--mixed'
