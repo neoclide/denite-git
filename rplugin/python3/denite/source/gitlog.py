@@ -16,7 +16,7 @@ from .base import Base
 def _parse_line(line, gitdir, filepath, winid):
     line = line.replace("'", '', 1)
     line = line.rstrip("'")
-    pattern = re.compile(r"(\*|\|)\s([0-9A-Za-z]{6,13})\s-\s")
+    pattern = re.compile(r"(\*|\|)\s+([0-9A-Za-z]{6,13})\s-\s")
     match = re.search(pattern, line)
     if not match:
         return None
