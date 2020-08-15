@@ -37,7 +37,7 @@ class Source(BaseSource):
         args = dict(enumerate(context['args']))
         branch = str(args.get(0, "master"))
         gitdir = self.vim.call('denite#git#gitdir')
-        context['__root'] = '' if not gitdir else os.path.dirname(gitdir)
+        context['__root'] = self.vim.call('denite#git#root', gitdir)
         context['__branch'] = branch
 
     def gather_candidates(self, context):

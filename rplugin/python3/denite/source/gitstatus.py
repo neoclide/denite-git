@@ -26,7 +26,7 @@ STATUS_MAP = {
     '?': '?'}
 
 
-def _parse_line(line, root, winnr):
+def _parse_line(line, gitdir, root, winnr):
     path = os.path.join(root, line[3:])
     index_symbol = STATUS_MAP[line[0]]
     tree_symbol = STATUS_MAP[line[1]]
@@ -34,6 +34,7 @@ def _parse_line(line, root, winnr):
     return {
         'word': word,
         'action__path': path,
+        'source__gitdir': gitdir,
         'source__root': root,
         'Source__winnr': winnr,
         'source__staged': index_symbol not in [' ', '?'],
@@ -63,11 +64,14 @@ class Source(Base):
         self.is_public_context = True
 
     def on_init(self, context):
-        winnr = self.vim.call('winnr')
+        context['__gitdir'] = self.vim.call('denite#git#gitdir')
+        if not context['__gitdir']:
+            return
+        context['__root'] = self.vim.call("denite#git#root", context['__gitdir'])
+        if not context['__root']:
+            return
 
-        gitdir = self.vim.call('denite#git#gitdir')
-        context['__root'] = '' if not gitdir else os.path.dirname(gitdir)
-        context['__winnr'] = winnr
+        context['__winnr'] = self.vim.call('winnr')
 
     def highlight(self):
         self.vim.command('highlight deniteGitStatusAdd guifg=#009900 ctermfg=2')
@@ -90,6 +94,7 @@ class Source(Base):
                          r'contained containedin=deniteGitStatusSymbol')
 
     def gather_candidates(self, context):
+        gitdir = context['__gitdir']
         root = context['__root']
         winnr = context['__winnr']
         if not root:
@@ -102,7 +107,7 @@ class Source(Base):
         for line in lines:
             if EMPTY_LINE.fullmatch(line):
                 continue
-            candidates.append(_parse_line(line, root, winnr))
+            candidates.append(_parse_line(line, gitdir, root, winnr))
 
         return candidates
 
@@ -150,7 +155,7 @@ class Kind(File):
         target = context['targets'][0]
         root = target['source__root']
         winnr = target['Source__winnr']
-        gitdir = os.path.join(target['source__root'], '.git')
+        gitdir = target['source__gitdir']
 
         preview_window = self.__get_preview_window()
 

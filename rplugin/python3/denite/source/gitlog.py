@@ -45,16 +45,16 @@ class Source(Base):
 
     def on_init(self, context):
         context['__proc'] = None
-        context['__root'] = None
-
-        args = dict(enumerate(context['args']))
-        gitdir = self.vim.call('denite#git#gitdir')
-        if not gitdir:
+        context['__gitdir'] = self.vim.call('denite#git#gitdir')
+        if not context['__gitdir']:
+            return
+        context['__root'] = self.vim.call('denite#git#root', context['__gitdir'])
+        if not context['__root']:
             return
 
+        args = dict(enumerate(context['args']))
         is_all = str(args.get(0, [])) == 'all'
         context['pattern'] = context['input'] if context['input'] else str(args.get(1, ''))
-        context['__root'] = os.path.dirname(gitdir)
         context['__winid'] = self.vim.call('win_getid')
         buftype = self.vim.current.buffer.options['buftype']
         fullpath = os.path.normpath(self.vim.call('expand', '%:p'))
@@ -95,7 +95,7 @@ class Source(Base):
         if not context['__root']:
             return []
         args = []
-        args += ['git', '--git-dir=' + os.path.join(context['__root'], '.git')]
+        args += ['git', '--git-dir=' + context['__gitdir']]
         args += ['--no-pager', 'log']
         args += self.vars['default_opts']
         if len(context['__file']):
@@ -117,11 +117,10 @@ class Source(Base):
         for line in errs:
             self.print_message(context, line)
 
-        gitdir = os.path.join(context['__root'], '.git')
         filepath = context['__file']
         winid = context['__winid']
         for line in outs:
-            result = _parse_line(line, gitdir, filepath, winid)
+            result = _parse_line(line, context['__gitdir'], filepath, winid)
             if not result:
                 continue
             candidates.append(result)

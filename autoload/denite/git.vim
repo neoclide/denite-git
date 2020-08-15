@@ -10,6 +10,14 @@ function! denite#git#gitdir() abort
   return fnamemodify(files[-1], ':p')
 endfunction
 
+function! denite#git#root(gitdir) abort
+  let out = systemlist('git --git-dir='.a:gitdir.' rev-parse --show-toplevel')
+  if v:shell_error
+    return v:null
+  endif
+  return out[0]
+endfunction
+
 function! denite#git#commit(prefix, files) abort
   if get(g:, 'loaded_fugitive', 0)
     execute 'Gcommit '.a:prefix .' ' . join(map(a:files, 'fnameescape(v:val)'), ' ')
