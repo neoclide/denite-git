@@ -62,7 +62,7 @@ function! denite#git#diffCurrent(revision, option) abort
   let list = split(output, '\v\r?\n')
   if !len(list)| diffoff | return | endif
   diffthis
-  execute 'keepalt '.edit.' +setl\ buftype=nofile [Git '.a:revision.']'
+  execute 'keepalt '.edit.' +setl\ buftype=nofile [[Git '.a:revision.']]'
   call setline(1, list[0])
   silent! call append(1, list[1:])
   execute 'setf ' . ft
@@ -92,7 +92,7 @@ function! denite#git#show(args, option)
   let output = system(command)
   let list = split(output, '\v\r?\n')
   if !len(list)| return | endif
-  execute 'keepalt '.edit.' +setl\ buftype=nofile [Git '.a:args.']'
+  execute 'keepalt '.edit.' +setl\ buftype=nofile [[Git '.a:args.']]'
   call setline(1, list[0])
   silent! call append(1, list[1:])
   setlocal filetype=git foldmethod=syntax readonly bufhidden=wipe
