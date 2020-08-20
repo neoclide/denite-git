@@ -205,7 +205,7 @@ class Kind(Openable):
         target = context['targets'][0]
         commit = target['source__commit']
         gitdir = target['source__gitdir']
-        suffix = commit + ']'
+        suffix = commit + ']]'
         preview_window = self.__get_preview_window()
         if preview_window:
             same = preview_window.buffer.name.endswith(suffix)
