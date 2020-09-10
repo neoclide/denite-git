@@ -13,7 +13,7 @@ from denite import util, process
 from .base import Base
 
 
-def _parse_line(line, gitdir, filepath, winid):
+def _parse_line(line, gitdir, root, filepath, winid):
     line = line.replace("'", '', 1)
     line = line.rstrip("'")
     pattern = re.compile(r"(\*|\|)\s+([0-9A-Za-z]{6,13})\s-\s")
@@ -24,6 +24,7 @@ def _parse_line(line, gitdir, filepath, winid):
         'word': line,
         'source__commit': match.group(2),
         'source__gitdir': gitdir,
+        'source__root': root,
         'source__file': filepath,
         'source__winid': winid
     }
@@ -99,7 +100,11 @@ class Source(Base):
         args += ['--no-pager', 'log']
         args += self.vars['default_opts']
         if len(context['__file']):
-            args += ['--', context['__file']]
+            git_file = os.path.relpath(
+                os.path.join(context['__root'], context['__file']),
+                os.path.dirname(context['__gitdir']),
+            )
+            args += ['--', git_file]
 
         self.print_message(context, ' '.join(args))
 
@@ -120,7 +125,9 @@ class Source(Base):
         filepath = context['__file']
         winid = context['__winid']
         for line in outs:
-            result = _parse_line(line, context['__gitdir'], filepath, winid)
+            result = _parse_line(
+                line, context['__gitdir'], context['__root'], filepath, winid
+            )
             if not result:
                 continue
             candidates.append(result)
@@ -186,7 +193,10 @@ class Kind(Openable):
         if split is not None:
             option['edit'] = split
         if not is_all:
-            option['file'] = target['source__file']
+            option['file'] = os.path.relpath(
+                os.path.join(target['source__root'], target['source__file']),
+                os.path.dirname(gitdir),
+            )
         self.vim.call('win_gotoid', winid)
         self.vim.call('denite#git#show', commit, option)
 
@@ -230,7 +240,10 @@ class Kind(Openable):
             option['preview_width'] = context['preview_width']
             option['preview_height'] = context['preview_height']
         if not is_all:
-            option['file'] = target['source__file']
+            option['file'] = os.path.relpath(
+                os.path.join(target['source__root'], target['source__file']),
+                os.path.dirname(gitdir),
+            )
         self.vim.call('denite#git#show', commit, option)
         self.vim.command('setl previewwindow')
         if not is_all:
