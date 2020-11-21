@@ -95,10 +95,12 @@ class Source(Base):
 
     def gather_candidates(self, context):
         gitdir = context['__gitdir']
+        if not gitdir:
+            return []
         root = context['__root']
-        winnr = context['__winnr']
         if not root:
             return []
+        winnr = context['__winnr']
         args = ['git', 'status', '--porcelain', '-uall']
         self.print_message(context, ' '.join(args))
         lines = run_command(args, root)
