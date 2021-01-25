@@ -67,10 +67,7 @@ class Source(Base):
         context['__gitdir'] = self.vim.call('denite#git#gitdir')
         if not context['__gitdir']:
             return
-        context['__root'] = self.vim.call("denite#git#root", context['__gitdir'])
-        if not context['__root']:
-            return
-
+        context['__root'] = os.path.dirname(context['__gitdir'])
         context['__winnr'] = self.vim.call('winnr')
 
     def highlight(self):

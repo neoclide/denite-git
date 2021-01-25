@@ -1,6 +1,6 @@
 
 function! denite#git#gitdir() abort
-  let gitdir = get(b:, 'git_dir', '')
+  let gitdir = get(b:, 'denite_git_git_dir', '')
   if !empty(gitdir) | return gitdir | endif
   let path = (empty(bufname('%')) || &buftype =~# '^\%(nofile\|acwrite\|quickfix\|terminal\)$') ? getcwd() : expand('%:p')
   let dir = finddir('.git', path.';')
@@ -8,14 +8,6 @@ function! denite#git#gitdir() abort
   let files = findfile('.git', path.';',-1)
   if empty(files) | return fnamemodify(dir, ':p:h') | endif
   return fnamemodify(files[-1], ':p')
-endfunction
-
-function! denite#git#root(gitdir) abort
-  let out = systemlist('git --git-dir='.a:gitdir.' rev-parse --show-toplevel')
-  if v:shell_error
-    return v:null
-  endif
-  return out[0]
 endfunction
 
 function! denite#git#commit(prefix, files) abort
@@ -67,7 +59,7 @@ function! denite#git#diffCurrent(revision, option) abort
   silent! call append(1, list[1:])
   execute 'setf ' . ft
   diffthis
-  let b:git_dir = gitdir
+  let b:denite_git_git_dir = gitdir
   setl foldenable
   call setwinvar(winnr(), 'easygit_diff_origin', bnr)
   call setpos('.', [bufnr('%'), 0, 0, 0])
@@ -112,7 +104,7 @@ function! denite#git#show(args, option)
   call setpos('.', [bufnr('%'), 7, 0, 0])
   exe 'nnoremap <buffer> <silent> u :call <SID>ShowParentCommit()<cr>'
   exe 'nnoremap <buffer> <silent> d :call <SID>ShowNextCommit()<cr>'
-  let b:git_dir = gitdir
+  let b:denite_git_git_dir = gitdir
 endfunction
 
 function! s:ShowParentCommit() abort
@@ -120,18 +112,18 @@ function! s:ShowParentCommit() abort
   if empty(commit) | return | endif
   call denite#git#show(commit, {
         \ 'eidt': 'edit',
-        \ 'gitdir': b:git_dir,
+        \ 'gitdir': b:denite_git_git_dir,
         \ 'all': 1,
         \})
 endfunction
 
 function! s:ShowNextCommit() abort
   let commit = matchstr(getline(1), '\v\s\zs.+$')
-  let commit = s:NextCommit(commit, b:git_dir)
+  let commit = s:NextCommit(commit, b:denite_git_git_dir)
   if empty(commit) | return | endif
   call denite#git#show(commit, {
         \ 'eidt': 'edit',
-        \ 'gitdir': b:git_dir,
+        \ 'gitdir': b:denite_git_git_dir,
         \ 'all': 1,
         \})
 endfunction

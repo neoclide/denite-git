@@ -48,7 +48,7 @@ class Source(BaseSource):
 
     def on_init(self, context):
         gitdir = self.vim.call('denite#git#gitdir')
-        context['__root'] = self.vim.call('denite#git#root', gitdir)
+        context['__root'] = os.path.dirname(gitdir)
 
     def gather_candidates(self, context):
         root = context['__root']

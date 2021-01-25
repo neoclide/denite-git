@@ -49,9 +49,7 @@ class Source(Base):
         context['__gitdir'] = self.vim.call('denite#git#gitdir')
         if not context['__gitdir']:
             return
-        context['__root'] = self.vim.call('denite#git#root', context['__gitdir'])
-        if not context['__root']:
-            return
+        context['__root'] = os.path.dirname(context['__gitdir'])
 
         args = dict(enumerate(context['args']))
         is_all = str(args.get(0, [])) == 'all'
@@ -102,7 +100,7 @@ class Source(Base):
         if len(context['__file']):
             git_file = os.path.relpath(
                 os.path.join(context['__root'], context['__file']),
-                os.path.dirname(context['__gitdir']),
+                context['__root'],
             )
             args += ['--', git_file]
 
